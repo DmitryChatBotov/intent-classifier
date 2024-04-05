@@ -1,0 +1,22 @@
+services:
+  classifier:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    shm_size: '2gb'
+    volumes:
+      - /home/shared/models/sentence_transformers:/home/shared/models/sentence_transformers
+      - ./chromadb_data:/src/chromadb_data
+      - ./data:/src/data
+    environment:
+      CACHE_FOLDER: "/home/shared/models/sentence_transformers/"
+    ports:
+      - "8501:8501"
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu]
